@@ -61,7 +61,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Reset email validation state to allow user to edit email again
   void _resetEmailState() {
     setState(() {
       _isEmailValid = false;
@@ -78,7 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Check if email exists in Firestore
       final QuerySnapshot userQuery = await FirebaseFirestore.instance
           .collection('koleksi_users')
           .where('email', isEqualTo: _emailController.text.trim())

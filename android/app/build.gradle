@@ -12,7 +12,7 @@ android {
     namespace = "com.example.gnoo"
     // compileSdk = flutter.compileSdkVersion
     compileSdk = 34
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "29.0.14033849"
 
 
     compileOptions {

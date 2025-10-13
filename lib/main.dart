@@ -18,8 +18,6 @@ import 'auth/login_screen.dart';
 import 'auth/onboarding_screen.dart';
 import 'main/main_page.dart';
 
-// Quick Actions Service class to handle platform-specific functionality
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class QuickActionsService {
@@ -32,14 +30,12 @@ class QuickActionsService {
   bool get isQuickActionSupported => !kIsWeb;
 
   Future<void> setupQuickActions() async {
-    // No need for context parameter anymore
     if (kIsWeb) {
       if (enableLogging)
         developer.log('Quick Actions: Skipped setup on web platform');
       return;
     }
 
-    // Rest of setup code remains the same
     if (enableLogging) developer.log('Quick Actions: Setting up shortcuts');
 
     try {
@@ -80,12 +76,10 @@ class QuickActionsService {
   }
 
   void _navigateToSearch() {
-    // No longer needs context
     if (enableLogging)
       developer.log('Quick Actions: Navigating to search page');
 
     Future.delayed(const Duration(milliseconds: 100), () {
-      // Use the global navigator key
       final navigator = navigatorKey.currentState;
       if (navigator != null) {
         navigator.pushNamed('/search');
@@ -141,9 +135,7 @@ class QuickActionsService {
     });
   }
 
-  // Simulate quick action on web for testing
   void simulateQuickAction(String type) {
-    // No longer needs context
     if (!kIsWeb) return;
 
     developer.log('Quick Actions Simulator: Simulating shortcut: $type');
@@ -159,7 +151,6 @@ class QuickActionsService {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -190,8 +181,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _quickActionsService = QuickActionsService(enableLogging: true);
     _checkInitialStatus();
-
-    // We'll set up quick actions after we know the user's login state
   }
 
   Future<void> _checkInitialStatus() async {
@@ -206,9 +195,7 @@ class _MyAppState extends State<MyApp> {
       _isLoggedIn = isLoggedIn;
     });
 
-    // Set up quick actions after we know the login state
     if (mounted && onboardingCompleted && isLoggedIn) {
-      // Use post-frame callback to ensure context is ready
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           _quickActionsService.setupQuickActions();
@@ -265,10 +252,8 @@ class _MyAppState extends State<MyApp> {
               Widget appWithDebugOverlay(Widget app) {
                 if (!kIsWeb) return app;
 
-                // Add a debug overlay button for web testing
                 return Directionality(
-                  textDirection:
-                      TextDirection.ltr, // Explicitly provide text direction
+                  textDirection: TextDirection.ltr,
                   child: Stack(
                     children: [
                       app,
@@ -345,7 +330,7 @@ class _MyAppState extends State<MyApp> {
                               : const LoginScreen())
                           : const OnboardingScreen(),
                   routes: {
-                    '/search': (context) => const SearchPage(), // Route statis
+                    '/search': (context) => const SearchPage(),
                   },
                   onGenerateRoute: (settings) {
                     if (settings.name == '/search') {
@@ -396,7 +381,7 @@ class _MyAppState extends State<MyApp> {
         ),
         scrolledUnderElevation: 0,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

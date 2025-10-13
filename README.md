@@ -10,6 +10,12 @@ Chameleon is an open source online gallery app built with Flutter. It is designe
 - **Quick Search:** Quickly find photos and videos using the powerful search feature.
 - **Open Source and Customizable:** Customize the app to suit your needs.
 
+## Screenshots
+
+<div style="display: flex; justify-content: space-around;">
+  <img src="./screenshots/ss.png" alt="" width="100%">
+</div>
+
 ## Getting Started
 
 1. **Prerequisites:**
@@ -46,7 +52,7 @@ We welcome contributions from the community. If you would like to contribute to 
 3. Commit your changes (`git commit -am 'Add new feature'`).
 4. Push to the branch (`git push origin feature/new-feature`).
 5. Create a new Pull Request.
-   
+
 ## Support
 
 If you have any questions or concerns, please open an issue on GitHub.
