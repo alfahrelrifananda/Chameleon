@@ -72,6 +72,7 @@ dependencies:
   open_file: ^3.5.10
   hive_flutter: ^1.1.0
   page_transition: ^2.2.1
+  flutter_dotenv: ^6.0.0
   # wallpaper_manager_flutter: ^0.0.2
   # firebase_messaging: ^15.2.1
   # flutter_local_notifications: ^18.0.1
@@ -109,6 +110,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - .env
     - assets/images/
     - assets/images/splash.svg
     - assets/images/file.svg
