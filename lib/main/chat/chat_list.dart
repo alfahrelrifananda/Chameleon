@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gnoo/main/chat/chats/ai_image_page.dart';
-import 'package:gnoo/main/chat/chats/ai_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -13,7 +11,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../pages/settings_bottom_sheet.dart';
 import 'chats/chat_page.dart';
 
-// Add enum for chat filters
 enum ChatFilter { all, unread, recent }
 
 class ChatListPage extends StatefulWidget {
@@ -31,14 +28,13 @@ class _ChatListPageState extends State<ChatListPage>
   // ignore: unused_field
   bool _isLoading = true;
   bool _isRefreshing = false;
-  bool _isInitialLoad = true; // Added flag for initial load
+  bool _isInitialLoad = true;
   Map<String, Map<String, dynamic>> _userDataCache = {};
   Map<String, bool> _unreadStatusCache = {};
   Stream<QuerySnapshot>? _chatStream;
   List<DocumentSnapshot> _cachedMessages = [];
   StreamSubscription? _chatSubscription;
 
-  // Add current filter state
   ChatFilter _currentFilter = ChatFilter.all;
 
   late AnimationController _fadeAnimationController;
@@ -76,7 +72,6 @@ class _ChatListPageState extends State<ChatListPage>
 
   Future<void> _initializeData() async {
     try {
-      // Set a timeout for initialization
       await Future.wait([
         _getCurrentUserId().timeout(
           const Duration(seconds: 10),
@@ -87,7 +82,6 @@ class _ChatListPageState extends State<ChatListPage>
         ),
       ], eagerError: true);
 
-      // Only setup stream if user ID is available
       if (_currentUserId != null) {
         _setupChatStream();
       } else {
@@ -119,7 +113,6 @@ class _ChatListPageState extends State<ChatListPage>
         }
       });
 
-      // Listen for unread messages to update the unread status cache
       FirebaseFirestore.instance
           .collection('koleksi_messages')
           .where('receiverId', isEqualTo: _currentUserId)
@@ -135,7 +128,6 @@ class _ChatListPageState extends State<ChatListPage>
     }
   }
 
-  // Add method to get filtered stream based on current filter
   Stream<QuerySnapshot> _getFilteredChatStream() {
     var query = FirebaseFirestore.instance
         .collection('koleksi_messages')
@@ -143,13 +135,11 @@ class _ChatListPageState extends State<ChatListPage>
 
     switch (_currentFilter) {
       case ChatFilter.unread:
-        // Add unread filter
         query = query
             .where('receiverId', isEqualTo: _currentUserId)
             .where('read', isEqualTo: false);
         break;
       case ChatFilter.recent:
-        // Recent messages (last 24 hours)
         final yesterday = DateTime.now().subtract(const Duration(hours: 24));
         final timestamp = Timestamp.fromDate(yesterday);
         query = query.where('timestamp', isGreaterThanOrEqualTo: timestamp);
@@ -157,14 +147,12 @@ class _ChatListPageState extends State<ChatListPage>
       case ChatFilter.all:
       // ignore: unreachable_switch_default
       default:
-        // No additional filtering needed
         break;
     }
 
     return query.orderBy('timestamp', descending: true).snapshots();
   }
 
-  // Add method to get filter title
   String _getFilterTitle() {
     switch (_currentFilter) {
       case ChatFilter.all:
@@ -176,126 +164,6 @@ class _ChatListPageState extends State<ChatListPage>
     }
   }
 
-  Widget _buildQuickAccessCards() {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          // First card - AI Chat
-          Expanded(
-            child: Card(
-              color: colorScheme.secondaryContainer,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(24),
-                onTap: () {
-                  // Navigation to AI Chat feature
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.sharedAxisVertical,
-                      child: const AIPage(), // Make sure to import this page
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.auto_awesome,
-                        color: colorScheme.onTertiaryContainer,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'AI Chat',
-                        style: textTheme.titleMedium?.copyWith(
-                          color: colorScheme.onSecondaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Ngobrolin banyak hal',
-                        style: textTheme.bodySmall?.copyWith(
-                          color:
-                              colorScheme.onSecondaryContainer.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          // Second card - AI Assistant
-          Expanded(
-            child: Card(
-              color: colorScheme.tertiaryContainer,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(24),
-                onTap: () {
-                  // Navigation to AI Assistant feature
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.sharedAxisVertical,
-                      child:
-                          const ImageGenerationPage(), // Make sure to import this page
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.auto_fix_high_rounded,
-                        color: colorScheme.onTertiaryContainer,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Kreasi Gambar',
-                        style: textTheme.titleMedium?.copyWith(
-                          color: colorScheme.onTertiaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Hasilkan gambar unik',
-                        style: textTheme.bodySmall?.copyWith(
-                          color:
-                              colorScheme.onTertiaryContainer.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Add method to show filter options
   void _showFilterOptions(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -386,18 +254,10 @@ class _ChatListPageState extends State<ChatListPage>
     );
   }
 
-  // Add method to update chat stream when filter changes
   void _updateChatStream() {
-    // Cancel existing subscription
     _chatSubscription?.cancel();
-
-    // Setup new filtered stream
     _chatStream = _getFilteredChatStream();
-
-    // Reset cache
     _cachedMessages = [];
-
-    // Listen to new stream
     _chatSubscription = _chatStream?.listen((snapshot) {
       if (mounted) {
         setState(() {
@@ -559,7 +419,6 @@ class _ChatListPageState extends State<ChatListPage>
                   );
                 }
 
-                // Show shimmer during initial load or refresh
                 if ((snapshot.connectionState == ConnectionState.waiting &&
                         _cachedMessages.isEmpty) ||
                     _isRefreshing) {
@@ -583,24 +442,17 @@ class _ChatListPageState extends State<ChatListPage>
                       ? _buildEmptyState()
                       : Column(
                           children: [
-                            // Add the quick access cards here
-                            _buildQuickAccessCards(),
-                            // Main chat list in an Expanded widget
                             Expanded(
                               child: AnimationLimiter(
                                 child: ListView.builder(
-                                  itemCount: latestMessages.length +
-                                      1, // +1 for padding item
+                                  itemCount: latestMessages.length + 1,
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8),
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    // Add padding item at the end
                                     if (index == latestMessages.length) {
-                                      return SizedBox(
-                                          height:
-                                              80); // Adjust this height based on your navbar
+                                      return SizedBox(height: 80);
                                     }
 
                                     return AnimationConfiguration.staggeredList(
@@ -629,7 +481,6 @@ class _ChatListPageState extends State<ChatListPage>
               },
             ),
           ),
-          // Loading overlay during refresh
           if (_isRefreshing)
             Container(
               color: colorScheme.background.withOpacity(0.5),

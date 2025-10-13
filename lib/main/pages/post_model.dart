@@ -10,7 +10,7 @@ class Post {
   final String userId;
   final List<String> tags;
   final int? likes;
-  final String? username; // Optional username field
+  final String? username;
 
   Post({
     required this.fotoId,

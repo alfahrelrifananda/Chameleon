@@ -309,7 +309,7 @@ class _MainPageState extends State<MainPage> {
                   curve: Curves.easeInOut,
                   right: 23,
                   bottom:
-                      _currentIndex == 0 ? (_isMiniFabVisible ? 100 : 0) : 0,
+                      _currentIndex == 0 ? (_isMiniFabVisible ? 150 : 0) : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity:
@@ -328,7 +328,7 @@ class _MainPageState extends State<MainPage> {
                   curve: Curves.easeInOut,
                   right: 23,
                   bottom:
-                      _currentIndex == 1 ? (_isMiniFabVisible ? 100 : 0) : 0,
+                      _currentIndex == 1 ? (_isMiniFabVisible ? 150 : 0) : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity:
@@ -342,7 +342,7 @@ class _MainPageState extends State<MainPage> {
                   curve: Curves.easeInOut,
                   right: 23,
                   bottom:
-                      _currentIndex == 2 ? (_isMiniFabVisible ? 100 : 0) : 0,
+                      _currentIndex == 2 ? (_isMiniFabVisible ? 150 : 0) : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity:
@@ -832,11 +832,11 @@ class _MainPageState extends State<MainPage> {
   // Build the main search FAB
   Widget _buildMainFAB(ColorScheme colorScheme) {
     return Container(
-      width: 64,
-      height: 64,
+      width: 96,
+      height: 96,
       decoration: BoxDecoration(
         color: colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: colorScheme.shadow.withOpacity(0.2),
@@ -851,7 +851,7 @@ class _MainPageState extends State<MainPage> {
           onTap: () {
             _showAddBottomSheet(context);
           },
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(24),
           child: Icon(
             Icons.add,
             color: colorScheme.onPrimaryContainer,
