@@ -37,20 +37,15 @@ cd chameleon
 flutter pub get
 ```
 
-4. **Run the app:**
 
-```bash
-flutter run
-```
-
-5. **Change the NDK version in android/app/build.gradle**
+4. **Change the NDK version in android/app/build.gradle**
 
 ```bash
 android
     ndkVersion (your NDK version)
 ```
 
-6. **Create a .env file in the root directory**
+5. **Create a .env file in the root directory**
 
 ```bash
 FIREBASE_PROJECT_ID='your-project-id'
@@ -80,6 +75,12 @@ FIREBASE_WINDOWS_API_KEY='your-windows-api-key'
 FIREBASE_WINDOWS_APP_ID='your-windows-app-id'
 FIREBASE_WINDOWS_AUTH_DOMAIN='your-windows-auth-domain'
 FIREBASE_WINDOWS_MEASUREMENT_ID='your-windows-measurement-id'    
+```
+
+6. **Run the app:**
+
+```bash
+flutter run
 ```
 
 ## Contributions
