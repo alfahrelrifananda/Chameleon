@@ -118,7 +118,6 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 
-  // Load user ID from SharedPreferences
   Future<void> _loadUid() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -126,7 +125,6 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  // Handle navigation between pages
   Future<void> _handleNavigation(int index) async {
     if (index == 0 && _currentIndex == 0) {
       // Access BoardsPage state through GlobalKey and trigger scroll to top and refresh
@@ -137,7 +135,6 @@ class _MainPageState extends State<MainPage> {
       }
     }
 
-    // Check if user is trying to access Profile page without being logged in
     if (index == 3 && _uid == null) {
       // await showLoginReminder(context);
       // Prevent going to Profile page if still not logged in after reminder
@@ -448,7 +445,7 @@ class _MainPageState extends State<MainPage> {
               ),
             );
             break;
-          case 4: // Download
+          case 4: 
             Navigator.push(
               context,
               PageTransition(
