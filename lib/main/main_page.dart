@@ -38,11 +38,11 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<BoardsPageState> _boardsKey = GlobalKey<BoardsPageState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
-  bool _isNavBarVisible = true; // Navbar visibility
-  bool _isMiniFabVisible = true; // Mini FAB visibility
-  bool _isSwipingToProfile = false; // Flag to prevent double login prompt
-  String? _uid; // User ID
-  String _selectedFilter = 'latest'; // Selected filter
+  bool _isNavBarVisible = true;
+  bool _isMiniFabVisible = true;
+  bool _isSwipingToProfile = false;
+  String? _uid;
+  String _selectedFilter = 'latest';
 
   final ScrollNotifier _scrollNotifier = ScrollNotifier();
 
@@ -50,71 +50,12 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-    _loadUid(); // Load user ID
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _showDevelopmentNotification();
-    // });
+    _loadUid();
   }
-
-  // void _showDevelopmentNotification() {
-  //   final colorScheme = Theme.of(context).colorScheme;
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.transparent,
-  //     builder: (BuildContext context) {
-  //       return Container(
-  //         decoration: BoxDecoration(
-  //           color: colorScheme.surface,
-  //           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-  //         ),
-  //         padding: EdgeInsets.fromLTRB(24, 24, 24, 32),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               'Dalam Pengembangan',
-  //               style: TextStyle(
-  //                 fontSize: 24,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: colorScheme.onSurface,
-  //               ),
-  //             ),
-  //             SizedBox(height: 16),
-  //             Text(
-  //               'Aplikasi ini masih dalam tahap pengembangan. Kami mohon maaf jika Anda menemukan bug atau fungsionalitas yang belum sempurna.',
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 color: colorScheme.onSurfaceVariant,
-  //               ),
-  //             ),
-  //             SizedBox(height: 24),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.end,
-  //               children: [
-  //                 OutlinedButton(
-  //                   onPressed: () => Navigator.of(context).pop(),
-  //                   style: FilledButton.styleFrom(
-  //                     backgroundColor: Colors.transparent,
-  //                     foregroundColor: colorScheme.onSurface,
-  //                     padding:
-  //                         EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  //                   ),
-  //                   child: Text('Baiklah'),
-  //                 ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   void dispose() {
-    _pageController.dispose(); // Dispose PageController
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -127,7 +68,6 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _handleNavigation(int index) async {
     if (index == 0 && _currentIndex == 0) {
-      // Access BoardsPage state through GlobalKey and trigger scroll to top and refresh
       final boardsState = _boardsKey.currentState;
       if (boardsState != null) {
         await boardsState.scrollToTopAndRefresh();
@@ -136,11 +76,9 @@ class _MainPageState extends State<MainPage> {
     }
 
     if (index == 3 && _uid == null) {
-      // await showLoginReminder(context);
-      // Prevent going to Profile page if still not logged in after reminder
       if (_currentIndex == 3 && _uid == null) {
         _pageController.animateToPage(
-          _currentIndex - 1, // Go back to the previous page
+          _currentIndex - 1,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
@@ -150,8 +88,8 @@ class _MainPageState extends State<MainPage> {
 
     setState(() {
       _currentIndex = index;
-      _isNavBarVisible = true; // Reset navbar visibility
-      _isMiniFabVisible = true; // Reset mini FAB visibility
+      _isNavBarVisible = true;
+      _isMiniFabVisible = true;
     });
     _pageController.animateToPage(
       index,
@@ -160,11 +98,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  // Update visibility of navbar and mini FAB
   void _updateVisibility(
       bool isNavBarVisible, bool isMiniFabVisible, int pageIndex) {
     if (pageIndex == _currentIndex) {
-      // Only update if the visibility change is for the current page
       setState(() {
         _isNavBarVisible = isNavBarVisible;
         _isMiniFabVisible = isMiniFabVisible;
@@ -172,16 +108,13 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  // Handle page changes from PageView
   Future<void> _handlePageChange(int index) async {
-    // Same login check as _handleNavigation
     if (index == 3 && _uid == null) {
       if (!_isSwipingToProfile) {
-        _isSwipingToProfile = true; // Prevent multiple prompts
-        // await showLoginReminder(context);
-        _isSwipingToProfile = false; // Reset the flag
+        _isSwipingToProfile = true;
+        _isSwipingToProfile = false;
         _pageController.animateToPage(
-          _currentIndex, // Stay on the current page
+          _currentIndex,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
@@ -191,7 +124,7 @@ class _MainPageState extends State<MainPage> {
 
     setState(() {
       _currentIndex = index;
-      _isNavBarVisible = true; // Reset visibility
+      _isNavBarVisible = true;
       _isMiniFabVisible = true;
     });
   }
@@ -215,26 +148,17 @@ class _MainPageState extends State<MainPage> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () async {
-            // Add async
-            final prefs =
-                await SharedPreferences.getInstance(); // Add user check
-            final String? userID = prefs.getString('uid');
-
-            if (userID == null) {
-              // await showLoginReminder(context);
-            } else {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.sharedAxisVertical,
-                  child: FollowPostPage(),
-                ),
-              );
-            }
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.sharedAxisVertical,
+                child: FollowPostPage(),
+              ),
+            );
           },
           borderRadius: BorderRadius.circular(12),
           child: Icon(
-            Icons.group_outlined, // Changed icon to match functionality
+            Icons.group_outlined,
             color: colorScheme.onPrimaryContainer,
             size: 24,
           ),
@@ -309,7 +233,7 @@ class _MainPageState extends State<MainPage> {
                   curve: Curves.easeInOut,
                   right: 23,
                   bottom:
-                      _currentIndex == 0 ? (_isMiniFabVisible ? 150 : 0) : 0,
+                      _currentIndex == 0 ? (_isMiniFabVisible ? 135 : 0) : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity:
@@ -328,7 +252,7 @@ class _MainPageState extends State<MainPage> {
                   curve: Curves.easeInOut,
                   right: 23,
                   bottom:
-                      _currentIndex == 1 ? (_isMiniFabVisible ? 150 : 0) : 0,
+                      _currentIndex == 1 ? (_isMiniFabVisible ? 135 : 0) : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity:
@@ -342,7 +266,7 @@ class _MainPageState extends State<MainPage> {
                   curve: Curves.easeInOut,
                   right: 23,
                   bottom:
-                      _currentIndex == 2 ? (_isMiniFabVisible ? 150 : 0) : 0,
+                      _currentIndex == 2 ? (_isMiniFabVisible ? 135 : 0) : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
                     opacity:
@@ -445,7 +369,7 @@ class _MainPageState extends State<MainPage> {
               ),
             );
             break;
-          case 4: 
+          case 4:
             Navigator.push(
               context,
               PageTransition(

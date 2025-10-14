@@ -649,92 +649,96 @@ class AnimatedAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: isVisible
           ? AppBar(
               key: const ValueKey<String>('AppBar'),
-              backgroundColor: Colors.transparent,
+              backgroundColor: colorScheme.surface,
               toolbarHeight: 75,
-              title: Column(
-                children: [
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(32),
-                      onTap: onSearchPressed,
-                      child: Ink(
-                        height: 60,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(32),
-                          border: Border.all(
-                            color: colorScheme.surfaceVariant,
+              automaticallyImplyLeading: false,
+              titleSpacing: 0,
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.menu_outlined,
+                            color: colorScheme.onSurfaceVariant,
                           ),
+                          onPressed: onMenuPressed,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.menu_outlined,
-                                        color: colorScheme.onSurfaceVariant,
-                                      ),
-                                      onPressed: onMenuPressed,
-                                    ),
-                                    StreamBuilder(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('koleksi_users')
-                                          .doc(currentUser?.uid)
-                                          .collection('koleksi_notifications')
-                                          .where('read', isEqualTo: false)
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        final int unreadCount =
-                                            snapshot.data?.docs.length ?? 0;
-                                        if (unreadCount <= 0)
-                                          return const SizedBox.shrink();
+                        StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('koleksi_users')
+                              .doc(currentUser?.uid)
+                              .collection('koleksi_notifications')
+                              .where('read', isEqualTo: false)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            final int unreadCount =
+                                snapshot.data?.docs.length ?? 0;
+                            if (unreadCount <= 0) {
+                              return const SizedBox.shrink();
+                            }
+                            return Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.error,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
 
-                                        return Positioned(
-                                          top: 8,
-                                          right: 8,
-                                          child: Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                              color: colorScheme
-                                                  .error, // Or colorScheme.primary if you prefer
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "Penelusuran ...",
-                                  style: TextStyle(
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
+                    const SizedBox(width: 8),
+
+                    Expanded(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(32),
+                          onTap: onSearchPressed,
+                          child: Ink(
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: colorScheme.surfaceContainerHighest,
+                              borderRadius: BorderRadius.circular(32),
+                              border: Border.all(
+                                color: colorScheme.surfaceVariant,
+                              ),
                             ),
-                            Icon(
-                              Icons.search,
-                              color: colorScheme.onSurfaceVariant,
+                            child: const Center(
+                              child: Text(
+                                "Penelusuran",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(width: 8),
+
+                    IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      onPressed: onSearchPressed,
+                    ),
+                  ],
+                ),
               ),
             )
           : const SizedBox.shrink(key: ValueKey<String>('Empty')),
