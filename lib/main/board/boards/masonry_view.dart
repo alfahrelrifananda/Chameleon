@@ -465,7 +465,7 @@ class AnimatedAppBar extends StatelessWidget implements PreferredSizeWidget {
                             // Use Center to center text horizontally & vertically
                             child: Center(
                               child: Text(
-                                "Penelusuran",
+                                "Cari postingan",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: colorScheme.onSurfaceVariant,
