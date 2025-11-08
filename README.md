@@ -1,13 +1,13 @@
 # Chameleon
 
-Chameleon is an open source online gallery app built with Flutter. It is designed to provide users with a seamless and intuitive experience for managing and displaying their photo and video collections.
+Chameleon is an open source online gallery app built with Flutter. It is designed to provide users with a seamless and intuitive experience for managing and displaying their photo.
 
 ## Key Features
 
 - **Attractive User Interface:** A modern and responsive user interface for a visually pleasing experience.
-- **Easy Media Management:** Easily upload, organize, and delete photos and videos.
+- **Easy Media Management:** Easily upload, organize, and delete photos.
 - **Albums and Collections:** Organize media into albums and collections for easy browsing.
-- **Quick Search:** Quickly find photos and videos using the powerful search feature.
+- **Quick Search:** Quickly find photos and using the powerful search feature.
 - **Open Source and Customizable:** Customize the app to suit your needs.
 
 ## Screenshots
